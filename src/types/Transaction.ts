@@ -1,11 +1,12 @@
-import { Address, Struct, BigNumber, Range } from 'wakkanay/dist/types'
+import { Address, Bytes, Struct, BigNumber, Range } from 'wakkanay/dist/types'
 import { Property } from 'wakkanay/dist/ovm'
 
 export default class Transaction {
   constructor(
     public depositContractAddress: Address,
     public range: Range,
-    public stateObject: Property
+    public stateObject: Property,
+    public signature: Bytes
   ) {}
 
   /**
@@ -15,7 +16,8 @@ export default class Transaction {
     return new Transaction(
       Address.default(),
       new Range(BigNumber.default(), BigNumber.default()),
-      new Property(Address.default(), [])
+      new Property(Address.default(), []),
+      Bytes.default()
     )
   }
 
@@ -31,12 +33,18 @@ export default class Transaction {
   }
 
   public static fromStruct(struct: Struct): Transaction {
-    const { depositContractAddress, range, stateObject } = struct.data
+    const {
+      depositContractAddress,
+      range,
+      stateObject,
+      signature
+    } = struct.data
 
     return new Transaction(
       depositContractAddress as Address,
       Range.fromStruct(range as Struct),
-      Property.fromStruct(stateObject as Struct)
+      Property.fromStruct(stateObject as Struct),
+      signature as Bytes
     )
   }
 
@@ -44,7 +52,8 @@ export default class Transaction {
     return new Struct({
       depositContractAddress: this.depositContractAddress,
       range: this.range.toStruct(),
-      stateObject: this.stateObject.toStruct()
+      stateObject: this.stateObject.toStruct(),
+      signature: this.signature
     })
   }
 }
