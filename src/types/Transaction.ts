@@ -6,7 +6,7 @@ export default class Transaction {
     public depositContractAddress: Address,
     public range: Range,
     public stateObject: Property,
-    public signature: Bytes
+    public signature: Bytes = Bytes.default()
   ) {}
 
   /**
@@ -28,7 +28,8 @@ export default class Transaction {
         start: BigNumber.default(),
         end: BigNumber.default()
       }),
-      stateObject: Property.getParamType()
+      stateObject: Property.getParamType(),
+      signature: Bytes.default()
     })
   }
 
@@ -54,6 +55,14 @@ export default class Transaction {
       range: this.range.toStruct(),
       stateObject: this.stateObject.toStruct(),
       signature: this.signature
+    })
+  }
+
+  public get body(): Struct {
+    return new Struct({
+      depositContractAddress: this.depositContractAddress,
+      range: this.range.toStruct(),
+      stateObject: this.stateObject.toStruct()
     })
   }
 }
