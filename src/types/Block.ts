@@ -3,6 +3,7 @@ import StateUpdate from './StateUpdate'
 import Coder from '../Coder'
 import { Bytes, BigNumber, Struct, List } from 'wakkanay/dist/types'
 import { Property } from 'wakkanay/dist/ovm'
+import { keccak256 } from 'wakkanay-ethereum/node_modules/ethers/utils'
 
 export default class Block {
   constructor(
@@ -19,9 +20,10 @@ export default class Block {
       return new verifiers.DoubleLayerTreeLeaf(
         s.depositContractAddress,
         s.range.start,
-        Coder.encode(s.property.toStruct())
+        Bytes.fromHexString(keccak256(Coder.encode(s.property.toStruct()).data))
       )
     })
+    console.log('leaves:', leaves)
     return new verifiers.DoubleLayerTree(leaves)
   }
 
