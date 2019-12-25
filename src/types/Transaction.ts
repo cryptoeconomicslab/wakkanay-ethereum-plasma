@@ -1,5 +1,7 @@
 import { Address, Bytes, Struct, BigNumber, Range } from 'wakkanay/dist/types'
 import { Property } from 'wakkanay/dist/ovm'
+import { Keccak256 } from 'wakkanay/dist/verifiers'
+import EthCoder from 'wakkanay-ethereum/dist/coder'
 
 export default class Transaction {
   constructor(
@@ -64,5 +66,9 @@ export default class Transaction {
       range: this.range.toStruct(),
       stateObject: this.stateObject.toStruct()
     })
+  }
+
+  public getHash(): Bytes {
+    return Keccak256.hash(EthCoder.encode(this.body))
   }
 }
