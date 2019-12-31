@@ -23,8 +23,8 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "wakkanay": "file:../wakkanay",
-    "wakkanay-ethereum": "file:../wakkanay-ethereum"
+    "wakkanay": "git+https://github.com/cryptoeconomicslab/wakkanay.git",
+    "wakkanay-ethereum": "git+https://github.com/cryptoeconomicslab/wakkanay-ethereum.git"
   },
   "devDependencies": {
     "@types/jest": "^24.0.24",

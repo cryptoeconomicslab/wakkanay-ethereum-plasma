@@ -3,15 +3,13 @@ import StateUpdate from './StateUpdate'
 import Coder from '../Coder'
 import { Bytes, BigNumber, Struct, List } from 'wakkanay/dist/types'
 import { Property } from 'wakkanay/dist/ovm'
-import { keccak256 } from 'wakkanay-ethereum/node_modules/ethers/utils'
+import { Keccak256 } from 'wakkanay/dist/verifiers'
 
 function generateLeaf(stateUpdate: StateUpdate): verifiers.DoubleLayerTreeLeaf {
   return new verifiers.DoubleLayerTreeLeaf(
     stateUpdate.depositContractAddress,
     stateUpdate.range.start,
-    Bytes.fromHexString(
-      keccak256(Coder.encode(stateUpdate.property.toStruct()).data)
-    )
+    Keccak256.hash(Coder.encode(stateUpdate.property.toStruct()))
   )
 }
 
