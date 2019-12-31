@@ -5,26 +5,55 @@ import { Bytes, BigNumber, Struct, List } from 'wakkanay/dist/types'
 import { Property } from 'wakkanay/dist/ovm'
 import { keccak256 } from 'wakkanay-ethereum/node_modules/ethers/utils'
 
+function generateLeaf(stateUpdate: StateUpdate): verifiers.DoubleLayerTreeLeaf {
+  return new verifiers.DoubleLayerTreeLeaf(
+    stateUpdate.depositContractAddress,
+    stateUpdate.range.start,
+    Bytes.fromHexString(
+      keccak256(Coder.encode(stateUpdate.property.toStruct()).data)
+    )
+  )
+}
+
 export default class Block {
+  private tree: verifiers.DoubleLayerTree | null = null
+
   constructor(
     readonly blockNumber: BigNumber,
     readonly stateUpdatesMap: Map<string, StateUpdate[]>
   ) {}
 
-  public generateTree(): verifiers.DoubleLayerTree {
+  public getTree(): verifiers.DoubleLayerTree {
+    if (this.tree) return this.tree
+
+    this.tree = this.generateTree()
+    return this.tree
+  }
+
+  private generateTree(): verifiers.DoubleLayerTree {
     let stateUpdates: StateUpdate[] = []
     this.stateUpdatesMap.forEach(v => {
       stateUpdates = [...stateUpdates, ...v]
     })
-    const leaves = stateUpdates.map(s => {
-      return new verifiers.DoubleLayerTreeLeaf(
-        s.depositContractAddress,
-        s.range.start,
-        Bytes.fromHexString(keccak256(Coder.encode(s.property.toStruct()).data))
-      )
-    })
+    const leaves = stateUpdates.map(generateLeaf)
     console.log('leaves:', leaves)
     return new verifiers.DoubleLayerTree(leaves)
+  }
+
+  public getInclusionProof(
+    stateUpdate: StateUpdate
+  ): verifiers.DoubleLayerInclusionProof | null {
+    const leaf = generateLeaf(stateUpdate)
+    const tree = this.getTree()
+    const i = tree.findIndex(leaf.encode())
+    if (!i) return null
+
+    const proof = tree.getInclusionProofByAddressAndIndex(
+      stateUpdate.depositContractAddress,
+      i
+    )
+
+    return proof
   }
 
   public static fromStruct(s: Struct): Block {
