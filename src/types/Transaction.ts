@@ -28,10 +28,7 @@ export default class Transaction {
   public static getParamTypes(): Struct {
     return new Struct({
       depositContractAddress: Address.default(),
-      range: new Struct({
-        start: BigNumber.default(),
-        end: BigNumber.default()
-      }),
+      range: Range.getParamType(),
       stateObject: Property.getParamType(),
       from: Address.default(),
       signature: Bytes.default()
