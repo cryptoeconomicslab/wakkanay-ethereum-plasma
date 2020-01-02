@@ -35,7 +35,7 @@ export default class TransactionReceipt {
     )
   }
 
-  public static getParamTypes(): Struct {
+  public static getParamType(): Struct {
     return new Struct({
       status: Integer.default(),
       blockNumber: BigNumber.default(),
