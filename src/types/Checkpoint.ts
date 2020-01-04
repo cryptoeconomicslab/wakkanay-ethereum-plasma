@@ -12,26 +12,30 @@ export default class Checkpoint {
   }
 
   public static getParamType(): Struct {
-    return new Struct({
-      subrange: Range.getParamType(),
-      stateUpdate: Property.getParamType()
-    })
+    return new Struct([
+      {
+        key: 'subrange',
+        value: Range.getParamType()
+      },
+      { key: 'stateUpdate', value: Property.getParamType() }
+    ])
   }
 
   public static fromStruct(struct: Struct): Checkpoint {
-    const { subrange, stateUpdate } = struct.data
-
     return new Checkpoint(
-      Range.fromStruct(subrange as Struct),
-      Property.fromStruct(stateUpdate as Struct)
+      Range.fromStruct(struct.data[0].value as Struct),
+      Property.fromStruct(struct.data[1].value as Struct)
     )
   }
 
   public toStruct(): Struct {
-    return new Struct({
-      subrange: this.subrange.toStruct(),
-      stateUpdate: this.stateUpdate.toStruct()
-    })
+    return new Struct([
+      {
+        key: 'subrange',
+        value: this.subrange.toStruct()
+      },
+      { key: 'stateUpdate', value: this.stateUpdate.toStruct() }
+    ])
   }
 
   // TODO: implement calculate checkpoint id

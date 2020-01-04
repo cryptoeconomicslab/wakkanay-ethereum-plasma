@@ -36,44 +36,35 @@ export default class TransactionReceipt {
   }
 
   public static getParamType(): Struct {
-    return new Struct({
-      status: Integer.default(),
-      blockNumber: BigNumber.default(),
-      range: new Range(BigNumber.default(), BigNumber.default()).toStruct(),
-      depositContractAddress: Address.default(),
-      from: Address.default(),
-      transactionHash: Bytes.default()
-    })
+    return new Struct([
+      { key: 'status', value: Integer.default() },
+      { key: 'blockNumber', value: BigNumber.default() },
+      { key: 'range', value: Range.getParamType() },
+      { key: 'depositContractAddress', value: Address.default() },
+      { key: 'from', value: Address.default() },
+      { key: 'transactionHash', value: Bytes.default() }
+    ])
   }
 
   public static fromStruct(struct: Struct): TransactionReceipt {
-    const {
-      status,
-      blockNumber,
-      range,
-      depositContractAddress,
-      from,
-      transactionHash
-    } = struct.data
-
     return new TransactionReceipt(
-      status as Integer,
-      blockNumber as BigNumber,
-      Range.fromStruct(range as Struct),
-      depositContractAddress as Address,
-      from as Address,
-      transactionHash as Bytes
+      struct.data[0].value as Integer,
+      struct.data[1].value as BigNumber,
+      Range.fromStruct(struct.data[2].value as Struct),
+      struct.data[3].value as Address,
+      struct.data[4].value as Address,
+      struct.data[5].value as Bytes
     )
   }
 
   public toStruct(): Struct {
-    return new Struct({
-      status: this.status,
-      range: this.range.toStruct(),
-      blockNumber: this.blockNumber,
-      depositContractAddress: this.depositContractAddress,
-      from: this.from,
-      transactionHash: this.transactionHash
-    })
+    return new Struct([
+      { key: 'status', value: this.status },
+      { key: 'blockNumber', value: this.blockNumber },
+      { key: 'range', value: this.range.toStruct() },
+      { key: 'depositContractAddress', value: this.depositContractAddress },
+      { key: 'from', value: this.from },
+      { key: 'transactionHash', value: this.transactionHash }
+    ])
   }
 }

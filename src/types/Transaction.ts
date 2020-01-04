@@ -26,23 +26,21 @@ export default class Transaction {
   }
 
   public static getParamTypes(): Struct {
-    return new Struct({
-      depositContractAddress: Address.default(),
-      range: Range.getParamType(),
-      stateObject: Property.getParamType(),
-      from: Address.default(),
-      signature: Bytes.default()
-    })
+    return new Struct([
+      { key: 'depositContractAddress', value: Address.default() },
+      { key: 'range', value: Range.getParamType() },
+      { key: 'stateObject', value: Property.getParamType() },
+      { key: 'from', value: Address.default() },
+      { key: 'signature', value: Bytes.default() }
+    ])
   }
 
   public static fromStruct(struct: Struct): Transaction {
-    const {
-      depositContractAddress,
-      range,
-      stateObject,
-      from,
-      signature
-    } = struct.data
+    const depositContractAddress = struct.data[0].value as Address
+    const range = struct.data[1].value as Struct
+    const stateObject = struct.data[2].value as Struct
+    const from = struct.data[3].value as Address
+    const signature = struct.data[4].value as Bytes
 
     return new Transaction(
       depositContractAddress as Address,
@@ -54,22 +52,22 @@ export default class Transaction {
   }
 
   public toStruct(): Struct {
-    return new Struct({
-      depositContractAddress: this.depositContractAddress,
-      range: this.range.toStruct(),
-      stateObject: this.stateObject.toStruct(),
-      from: this.from,
-      signature: this.signature
-    })
+    return new Struct([
+      { key: 'depositContractAddress', value: this.depositContractAddress },
+      { key: 'range', value: this.range.toStruct() },
+      { key: 'stateObject', value: this.stateObject.toStruct() },
+      { key: 'from', value: this.from },
+      { key: 'signature', value: this.signature }
+    ])
   }
 
   public get body(): Struct {
-    return new Struct({
-      depositContractAddress: this.depositContractAddress,
-      range: this.range.toStruct(),
-      from: this.from,
-      stateObject: this.stateObject.toStruct()
-    })
+    return new Struct([
+      { key: 'depositContractAddress', value: this.depositContractAddress },
+      { key: 'range', value: this.range.toStruct() },
+      { key: 'stateObject', value: this.stateObject.toStruct() },
+      { key: 'from', value: this.from }
+    ])
   }
 
   public getHash(): Bytes {

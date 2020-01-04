@@ -56,15 +56,15 @@ export default class Block {
 
   public static fromStruct(s: Struct): Block {
     const map = new Map()
-    const tokenAddresses = s.data.tokenAddresses as List<Bytes>
-    const stateUpdatesList = s.data.stateUpdatesList as List<List<Struct>>
-    const blockNumber = s.data.blockNumber as BigNumber
-    tokenAddresses.data.forEach((b: Bytes, i) => {
+    const blockNumber = s.data[0].value as BigNumber
+    const tokenAddresses = s.data[1].value as List<Bytes>
+    const stateUpdatesList = s.data[2].value as List<List<Struct>>
+    tokenAddresses.data.forEach((b: Bytes, i: number) => {
       const key = b.toHexString()
       map.set(
         key,
         stateUpdatesList.data[i].data.map(
-          s => new StateUpdate(Property.fromStruct(s))
+          (s: Struct) => new StateUpdate(Property.fromStruct(s))
         )
       )
     })
@@ -85,40 +85,55 @@ export default class Block {
       )
     })
 
-    return new Struct({
-      blockNumber: this.blockNumber,
-      tokenAddresses: List.from(Bytes, addrs.map(Bytes.fromHexString)),
-      stateUpdatesList: List.from(
-        {
-          default: () =>
-            List.default(
-              {
-                default: Property.getParamType
-              },
-              Property.getParamType()
-            )
-        },
-        stateUpdatesList
-      )
-    })
+    return new Struct([
+      {
+        key: 'blockNumber',
+        value: this.blockNumber
+      },
+      {
+        key: 'tokenAddresses',
+        value: List.from(Bytes, addrs.map(Bytes.fromHexString))
+      },
+      {
+        key: 'stateUpdatesList',
+        value: List.from(
+          {
+            default: () =>
+              List.default(
+                {
+                  default: Property.getParamType
+                },
+                Property.getParamType()
+              )
+          },
+          stateUpdatesList
+        )
+      }
+    ])
   }
 
   public static getParamType(): Struct {
-    return new Struct({
-      blockNumber: BigNumber.default(),
-      tokenAddresses: List.default(Bytes, Bytes.default()),
-      stateUpdatesList: List.default(
-        {
-          default: () =>
-            List.default(
-              {
-                default: Property.getParamType
-              },
-              Property.getParamType()
-            )
-        },
-        List.from({ default: Property.getParamType }, [])
-      )
-    })
+    return new Struct([
+      {
+        key: 'blockNumber',
+        value: BigNumber.default()
+      },
+      { key: 'tokenAddresses', value: List.default(Bytes, Bytes.default()) },
+      {
+        key: 'stateUpdatesList',
+        value: List.default(
+          {
+            default: () =>
+              List.default(
+                {
+                  default: Property.getParamType
+                },
+                Property.getParamType()
+              )
+          },
+          List.from({ default: Property.getParamType }, [])
+        )
+      }
+    ])
   }
 }
