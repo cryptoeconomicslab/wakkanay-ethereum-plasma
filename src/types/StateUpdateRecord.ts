@@ -22,36 +22,29 @@ export default class StateUpdateRecord {
   }
 
   public static getParamType(): Struct {
-    return new Struct({
-      predicateAddress: Address.default(),
-      depositContractAddress: Address.default(),
-      blockNumber: BigNumber.default(),
-      stateObject: Property.getParamType()
-    })
+    return new Struct([
+      { key: 'predicateAddress', value: Address.default() },
+      { key: 'depositContractAddress', value: Address.default() },
+      { key: 'blockNumber', value: BigNumber.default() },
+      { key: 'stateObject', value: Property.getParamType() }
+    ])
   }
 
   public static fromStruct(struct: Struct): StateUpdateRecord {
-    const {
-      predicateAddress,
-      blockNumber,
-      depositContractAddress,
-      stateObject
-    } = struct.data
-
     return new StateUpdateRecord(
-      predicateAddress as Address,
-      depositContractAddress as Address,
-      blockNumber as BigNumber,
-      Property.fromStruct(stateObject as Struct)
+      struct.data[0].value as Address,
+      struct.data[1].value as Address,
+      struct.data[2].value as BigNumber,
+      Property.fromStruct(struct.data[3].value as Struct)
     )
   }
 
   public toStruct(): Struct {
-    return new Struct({
-      predicateAddress: this.predicateAddress,
-      depositContractAddress: this.depositContractAddress,
-      blockNumber: this.blockNumber,
-      stateObject: this.stateObject.toStruct()
-    })
+    return new Struct([
+      { key: 'predicateAddress', value: this.predicateAddress },
+      { key: 'depositContractAddress', value: this.depositContractAddress },
+      { key: 'blockNumber', value: this.blockNumber },
+      { key: 'stateObject', value: this.stateObject.toStruct() }
+    ])
   }
 }
