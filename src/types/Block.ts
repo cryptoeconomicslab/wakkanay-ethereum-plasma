@@ -38,6 +38,24 @@ export default class Block {
     return new verifiers.DoubleLayerTree(leaves)
   }
 
+  public verifyInclusion(
+    stateUpdate: StateUpdate,
+    inclusionProof: verifiers.DoubleLayerInclusionProof
+  ): boolean {
+    const tree = this.getTree()
+    const leaf = generateLeaf(stateUpdate)
+    if (tree.findIndex(leaf.encode()) === null) {
+      return false
+    }
+    const verifier = new verifiers.DoubleLayerTreeVerifier()
+    return verifier.verifyInclusion(
+      leaf,
+      stateUpdate.range,
+      tree.getRoot(),
+      inclusionProof
+    )
+  }
+
   public getInclusionProof(
     stateUpdate: StateUpdate
   ): verifiers.DoubleLayerInclusionProof | null {
