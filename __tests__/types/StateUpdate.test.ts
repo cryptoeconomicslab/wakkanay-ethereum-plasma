@@ -1,6 +1,12 @@
-import { Property, FreeVariable } from 'wakkanay/dist/ovm'
+import { types, ovm } from 'wakkanay-ethereum'
+import Address = types.Address
+import Range = types.Range
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Property = ovm.Property
+import FreeVariable = ovm.FreeVariable
+
 import { StateUpdate, StateUpdateRecord } from '../../src/types'
-import { Address, Range, BigNumber, Bytes } from 'wakkanay/dist/types'
 import Coder from '../../src/Coder'
 import { config } from 'dotenv'
 config()

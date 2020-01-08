@@ -1,3 +1,3 @@
-import EthCoder from 'wakkanay-ethereum/dist/coder'
+import { ethCoder } from 'wakkanay-ethereum'
 
-export default EthCoder
+export default ethCoder.EthCoder

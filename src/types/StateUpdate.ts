@@ -1,9 +1,14 @@
-import { Address, Bytes, BigNumber, Range } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
+import { types, ovm, db, utils } from 'wakkanay-ethereum'
+import Address = types.Address
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Range = types.Range
+import Property = ovm.Property
+import DecoderUtil = utils.DecoderUtil
+import RangeRecord = db.RangeRecord
+
 import StateUpdateRecord from './StateUpdateRecord'
 import Coder from '../Coder'
-import { DecoderUtil } from 'wakkanay/dist/utils'
-import { RangeRecord } from 'wakkanay/dist/db/RangeStore'
 
 /**
  * StateUpdate wrapper class

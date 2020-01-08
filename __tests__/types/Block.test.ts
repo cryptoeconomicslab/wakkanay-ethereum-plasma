@@ -1,8 +1,13 @@
+import { types, ovm } from 'wakkanay-ethereum'
+import Address = types.Address
+import Range = types.Range
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Property = ovm.Property
+
 import Block from '../../src/types/Block'
 import Coder from '../../src/Coder'
-import { BigNumber, Address, Range, Bytes } from 'wakkanay/dist/types'
 import StateUpdate from '../../src/types/StateUpdate'
-import { Property } from 'wakkanay/dist/ovm'
 
 describe('Block', () => {
   const testAddr = Address.default()

@@ -1,11 +1,10 @@
-import {
-  Struct,
-  BigNumber,
-  Address,
-  Range,
-  Bytes,
-  Integer
-} from 'wakkanay/dist/types'
+import { types } from 'wakkanay-ethereum'
+import Address = types.Address
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Struct = types.Struct
+import Range = types.Range
+import Integer = types.Integer
 
 export const STATUS = {
   TRUE: Integer.from(1),

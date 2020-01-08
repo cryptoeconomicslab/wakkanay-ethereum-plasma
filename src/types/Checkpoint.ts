@@ -1,5 +1,10 @@
-import { Address, BigNumber, Range, Struct, Bytes } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
+import { types, ovm } from 'wakkanay-ethereum'
+import Address = types.Address
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Struct = types.Struct
+import Range = types.Range
+import Property = ovm.Property
 
 export default class Checkpoint {
   constructor(public subrange: Range, public stateUpdate: Property) {}

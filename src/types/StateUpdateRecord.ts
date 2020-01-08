@@ -1,5 +1,8 @@
-import { Address, Struct, BigNumber } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
+import { types, ovm } from 'wakkanay-ethereum'
+import Address = types.Address
+import Struct = types.Struct
+import BigNumber = types.BigNumber
+import Property = ovm.Property
 
 export default class StateUpdateRecord {
   constructor(

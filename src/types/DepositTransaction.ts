@@ -1,5 +1,6 @@
-import { Address } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
+import { types, ovm } from 'wakkanay-ethereum'
+import Address = types.Address
+import Property = ovm.Property
 
 export default class DepositTransaction {
   constructor(

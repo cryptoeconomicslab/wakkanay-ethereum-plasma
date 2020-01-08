@@ -1,9 +1,13 @@
-import { verifiers } from 'wakkanay'
+import { types, ovm, verifiers } from 'wakkanay-ethereum'
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Struct = types.Struct
+import List = types.List
+import Property = ovm.Property
+import Keccak256 = verifiers.Keccak256
+
 import StateUpdate from './StateUpdate'
 import Coder from '../Coder'
-import { Bytes, BigNumber, Struct, List } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
-import { Keccak256 } from 'wakkanay/dist/verifiers'
 
 function generateLeaf(stateUpdate: StateUpdate): verifiers.DoubleLayerTreeLeaf {
   return new verifiers.DoubleLayerTreeLeaf(

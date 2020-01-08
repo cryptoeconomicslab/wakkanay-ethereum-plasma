@@ -1,6 +1,9 @@
-import { BigNumber, Bytes } from 'wakkanay/dist/types'
+import { types, verifiers } from 'wakkanay-ethereum'
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import DoubleLayerInclusionProof = verifiers.DoubleLayerInclusionProof
+
 import Transaction from './Transaction'
-import { DoubleLayerInclusionProof } from 'wakkanay/dist/verifiers'
 import StateUpdate from './StateUpdate'
 
 export interface CheckpointElement {

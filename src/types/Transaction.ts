@@ -1,7 +1,12 @@
-import { Address, Bytes, Struct, BigNumber, Range } from 'wakkanay/dist/types'
-import { Property } from 'wakkanay/dist/ovm'
-import { Keccak256 } from 'wakkanay/dist/verifiers'
-import EthCoder from 'wakkanay-ethereum/dist/coder'
+import { ethCoder, types, ovm, verifiers } from 'wakkanay-ethereum'
+import Address = types.Address
+import BigNumber = types.BigNumber
+import Bytes = types.Bytes
+import Struct = types.Struct
+import Range = types.Range
+import Property = ovm.Property
+import Keccak256 = verifiers.Keccak256
+import EthCoder = ethCoder.EthCoder
 
 export default class Transaction {
   constructor(
