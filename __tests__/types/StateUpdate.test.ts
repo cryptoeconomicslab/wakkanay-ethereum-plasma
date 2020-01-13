@@ -4,19 +4,8 @@ import Range = types.Range
 import BigNumber = types.BigNumber
 import Bytes = types.Bytes
 import Property = ovm.Property
-import FreeVariable = ovm.FreeVariable
-
 import { StateUpdate, StateUpdateRecord } from '../../src/types'
 import Coder from '../../src/Coder'
-import { config } from 'dotenv'
-config()
-
-const THERE_EXISTS_ADDRESS = Address.from(
-  process.env.THERE_EXISTS_ADDRESS as string
-)
-const IS_VALID_SIGNATURE_ADDRESS = Address.from(
-  process.env.IS_VALID_SIG_ADDRESS as string
-)
 
 describe('StateUpdate', () => {
   const stateUpdateProperty = new Property(
@@ -28,30 +17,6 @@ describe('StateUpdate', () => {
       new Property(Address.default(), [Bytes.fromHexString('0x01')]).toStruct()
     ].map(Coder.encode)
   )
-
-  // TODO: extract and use compiled property
-  function ownershipProperty(from: Address) {
-    const hint = Bytes.fromString('tx,key')
-    const sigHint = Bytes.fromString('sig,key')
-    return new Property(THERE_EXISTS_ADDRESS, [
-      hint,
-      Bytes.fromString('tx'),
-      Coder.encode(
-        new Property(THERE_EXISTS_ADDRESS, [
-          sigHint,
-          Bytes.fromString('sig'),
-          Coder.encode(
-            new Property(IS_VALID_SIGNATURE_ADDRESS, [
-              FreeVariable.from('tx'),
-              FreeVariable.from('sig'),
-              Coder.encode(from),
-              Bytes.fromString('secp256k1')
-            ]).toStruct()
-          )
-        ]).toStruct()
-      )
-    ])
-  }
 
   test('new(property)', () => {
     const stateUpdate = new StateUpdate(stateUpdateProperty)
@@ -108,47 +73,5 @@ describe('StateUpdate', () => {
     expect(stateUpdate.range).toStrictEqual(
       new Range(BigNumber.from(5), BigNumber.from(10))
     )
-  })
-
-  test('isOwnershipState() true', () => {
-    const property = ownershipProperty(Address.default())
-    const stateUpdate = new StateUpdate(
-      new Property(
-        Address.default(),
-        [
-          Address.default(),
-          new Range(BigNumber.from(0), BigNumber.from(10)).toStruct(),
-          BigNumber.from(1),
-          property.toStruct()
-        ].map(Coder.encode)
-      )
-    )
-    expect(stateUpdate.isOwnershipState()).toBeTruthy()
-  })
-
-  test('isOwnershipState() false', () => {
-    const stateUpdate = new StateUpdate(stateUpdateProperty)
-    expect(stateUpdate.isOwnershipState()).toBeFalsy()
-  })
-
-  test('getOwner()', () => {
-    const property = ownershipProperty(Address.default())
-    const stateUpdate = new StateUpdate(
-      new Property(
-        Address.default(),
-        [
-          Address.default(),
-          new Range(BigNumber.from(0), BigNumber.from(10)).toStruct(),
-          BigNumber.from(1),
-          property.toStruct()
-        ].map(Coder.encode)
-      )
-    )
-    expect(stateUpdate.getOwner()).toStrictEqual(Address.default())
-  })
-
-  test('getOwner() undefined', () => {
-    const stateUpdate = new StateUpdate(stateUpdateProperty)
-    expect(stateUpdate.getOwner()).toBeFalsy()
   })
 })

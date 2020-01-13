@@ -104,39 +104,4 @@ export default class StateUpdate {
       this.stateObject
     )
   }
-
-  public isOwnershipState(): boolean {
-    const thereExistsAddress = Address.from(
-      process.env.THERE_EXISTS_ADDRESS as string
-    )
-    const isValidSigAddress = Address.from(
-      process.env.IS_VALID_SIG_ADDRESS as string
-    )
-
-    let inner = this.stateObject
-    if (inner.deciderAddress.data !== thereExistsAddress.data) return false
-    inner = DecoderUtil.decodeStructable(Property, Coder, inner.inputs[2])
-    if (inner.deciderAddress.data !== thereExistsAddress.data) return false
-    inner = DecoderUtil.decodeStructable(Property, Coder, inner.inputs[2])
-    if (inner.deciderAddress.data !== isValidSigAddress.data) return false
-
-    return true
-  }
-
-  public getOwner(): Address | undefined {
-    const thereExistsAddress = Address.from(
-      process.env.THERE_EXISTS_ADDRESS as string
-    )
-    const isValidSigAddress = Address.from(
-      process.env.IS_VALID_SIG_ADDRESS as string
-    )
-
-    let inner = this.stateObject
-    if (inner.deciderAddress.data !== thereExistsAddress.data) return
-    inner = DecoderUtil.decodeStructable(Property, Coder, inner.inputs[2])
-    if (inner.deciderAddress.data !== thereExistsAddress.data) return
-    inner = DecoderUtil.decodeStructable(Property, Coder, inner.inputs[2])
-    if (inner.deciderAddress.data !== isValidSigAddress.data) return
-    return Coder.decode(Address.default(), inner.inputs[2])
-  }
 }
