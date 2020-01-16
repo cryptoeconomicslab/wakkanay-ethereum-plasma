@@ -88,7 +88,7 @@ export default class Transaction {
 
   public toProperty(deciderAddress: Address): Property {
     return new Property(deciderAddress, [
-      Bytes.fromHexString(this.depositContractAddress.raw),
+      Bytes.fromHexString(this.depositContractAddress.raw).padZero(32),
       this.range.toBytes(),
       Bytes.fromHexString(this.prevBlockNumber.toHexString()).padZero(32),
       EthCoder.encode(this.stateObject.toStruct())
